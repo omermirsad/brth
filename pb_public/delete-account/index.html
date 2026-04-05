@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Deletion Request — Breathe by BuddyLabs</title>
+    <meta name="description" content="Request permanent deletion of your Breathe account and all associated data.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -43,6 +44,7 @@
             color: #fff;
             font-family: inherit;
             font-size: 15px;
+            transition: border-color 0.2s;
         }
         input:focus, textarea:focus {
             outline: none;
@@ -61,11 +63,14 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, opacity 0.2s;
             margin-top: 8px;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background: #c4b5fd;
+        }
+        button:disabled {
+            cursor: not-allowed;
         }
         .footer {
             margin-top: 48px;
@@ -83,6 +88,43 @@
             font-size: 14px;
             color: #d8b4fe;
         }
+        .error-message {
+            color: #ef4444;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .success-container svg {
+            width: 64px;
+            height: 64px;
+            color: #a78bfa;
+            margin: 0 auto 16px;
+            display: block;
+        }
+        .success-container h2 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .success-container p {
+            color: #b0b0bc;
+            font-size: 15px;
+            margin-bottom: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -94,23 +136,83 @@
             <strong>Note:</strong> Deleting your account will not automatically cancel your subscription. You must cancel active subscriptions through your device's App Store or Google Play settings.
         </div>
 
-        <form action="mailto:support@buddylabs.app?subject=Account%20Deletion%20Request" method="POST" enctype="text/plain">
-            <div>
-                <label for="email">Account Email Address</label>
-                <input type="email" id="email" name="Email" placeholder="Enter the email associated with your account" required>
-            </div>
-            
-            <div>
-                <label for="reason">Reason for Leaving (Optional)</label>
-                <textarea id="reason" name="Reason" placeholder="Let us know how we can improve..."></textarea>
-            </div>
-            
-            <button type="submit">Submit Request</button>
-        </form>
+        <div id="formContainer">
+            <form id="deleteForm">
+                <div>
+                    <label for="email">Account Email Address</label>
+                    <input type="email" id="email" name="Email" placeholder="Enter the email associated with your account" required>
+                </div>
+                
+                <div>
+                    <label for="reason">Reason for Leaving (Optional)</label>
+                    <textarea id="reason" name="Reason" placeholder="Let us know how we can improve..."></textarea>
+                </div>
+                
+                <button type="submit" id="submitBtn">Submit Request</button>
+            </form>
+            <p id="errorMessage" class="error-message"></p>
+        </div>
+
+        <div id="successMessage" class="success-container">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h2>Request Submitted</h2>
+            <p>Your account deletion request has been securely received. Our support team will process this shortly.</p>
+        </div>
     </div>
 
     <div class="footer">
         &copy; 2026 BuddyLabs. All rights reserved.
     </div>
+
+    <script>
+        document.getElementById('deleteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            const email = document.getElementById('email').value;
+            const reason = document.getElementById('reason').value;
+            
+            // Set loading state
+            btn.disabled = true;
+            btn.innerText = 'Submitting...';
+            btn.style.opacity = '0.7';
+            errorMsg.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/collections/deletion_requests/records', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        reason: reason,
+                        status: 'pending'
+                    })
+                });
+                
+                if (!response.ok) {
+                    const data = await response.json().catch(() => null);
+                    throw new Error(data?.message || 'Failed to submit request');
+                }
+                
+                // Show success UI
+                document.getElementById('formContainer').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+            } catch (error) {
+                // Revert loading state and show error
+                btn.disabled = false;
+                btn.innerText = 'Submit Request';
+                btn.style.opacity = '1';
+                errorMsg.innerText = 'An error occurred. Please try again or email support@buddylabs.app directly.';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

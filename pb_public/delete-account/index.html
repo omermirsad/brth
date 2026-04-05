@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deletion Request — Breathe by BuddyLabs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e6;
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+        .container { max-width: 600px; margin: 0 auto; background: #1a1a2e; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 15px;
+            color: #b0b0bc;
+            margin-bottom: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        label {
+            font-size: 14px;
+            color: #c4b5fd;
+            font-weight: 500;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0a0a0f;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        button {
+            padding: 14px 20px;
+            background: #a78bfa;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+        button:hover {
+            background: #c4b5fd;
+        }
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+        .info {
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #d8b4fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Deletion Request</h1>
+        <p>If you'd like to permanently delete your Breathe account and all associated data, please fill out the form below. Alternatively, you can delete your account immediately from within the Breathe app by going to <strong>Settings > Delete Account</strong>.</p>
+
+        <div class="info">
+            <strong>Note:</strong> Deleting your account will not automatically cancel your subscription. You must cancel active subscriptions through your device's App Store or Google Play settings.
+        </div>
+
+        <form action="mailto:support@buddylabs.app?subject=Account%20Deletion%20Request" method="POST" enctype="text/plain">
+            <div>
+                <label for="email">Account Email Address</label>
+                <input type="email" id="email" name="Email" placeholder="Enter the email associated with your account" required>
+            </div>
+            
+            <div>
+                <label for="reason">Reason for Leaving (Optional)</label>
+                <textarea id="reason" name="Reason" placeholder="Let us know how we can improve..."></textarea>
+            </div>
+            
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 BuddyLabs. All rights reserved.
+    </div>
+</body>
+</html>

@@ -183,7 +183,7 @@
             errorMsg.style.display = 'none';
             
             try {
-                const response = await fetch('/api/collections/deletion_requests/records', {
+                const response = await fetch('https://breathe-api.buddylabs.app/api/collections/deletion_requests/records', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
